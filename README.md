@@ -47,7 +47,7 @@ source ~/catkin_ws/devel/setup.bash
 
 To run the demo:
 ```sh
-$ cd ~/catkin_ws/src/RoboND-Perception-Project/pr2_robot/scripts
+$ cd ~/catkin_ws/src/RoboticPerception/pr2_robot/scripts
 $ chmod u+x pr2_safe_spawner.sh
 $ ./pr2_safe_spawner.sh
 ```
