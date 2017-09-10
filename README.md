@@ -37,7 +37,7 @@ $ catkin_make
 ```
 Add following to your .bashrc file
 ```
-export GAZEBO_MODEL_PATH=~/catkin_ws/src/RoboND-Perception-Project/pr2_robot/models:$GAZEBO_MODEL_PATH
+export GAZEBO_MODEL_PATH=~/catkin_ws/src/RoboticPerception/pr2_robot/models:$GAZEBO_MODEL_PATH
 ```
 
 If you haven’t already, following line can be added to your .bashrc to auto-source all new terminals
