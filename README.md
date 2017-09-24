@@ -1,11 +1,106 @@
-[![Udacity - Robotics NanoDegree Program](https://s3-us-west-1.amazonaws.com/udacity-robotics/Extra+Images/RoboND_flag.png)](https://www.udacity.com/robotics)
 # 3D Perception
 This [Udacity clone project](https://github.com/udacity/RoboND-Perception-Project) is modeled after [Amazon Robotics Challenge](https://www.amazonrobotics.com/#/roboticschallenge/results). Giving a robot the ability to locate an object in a cluttered environment, pick it up and then move it to some other location is not just an interesting problem to try to solve,
 it's a challenge at the forefront of the robotics industry today. 
 
 A perception pipeline is created base on Exercises 1, 2 and 3  from [RoboND Percetion Excercises](https://github.com/fouliex/RoboND-Perception-Exercises) o identify target objects from a so-called “Pick-List” in that particular order, pick up those objects and place them in corresponding dropboxes.
 
+# Perception Pipeline
+## Tabletop Segmentation
+The Table Segmetation is about applying some filtering techniques and use RANSAC plane fitting to segment a table in a point cloud.
 
+### Downsample your point cloud by applying a Voxel Grid Filter
+When running computation on full resolution point cloud can be slow and may not achieve any improvement on results obtained using a more widely apart sampled point cloud.
+Therefore, in many cases, it is advantageous to downsample the data.
+
+VoxelGrid is use to Downsampling Filter to drive a point cloud that has fewer points but should  do a good job of representing the input point cloud as a whole. As the word "pixel" is short for "picture element", the word
+"voxel" is short for "volume element". Just as we can divided a 2d image into a regular grid of aread element, we can also divided up a 3D point cloud, into a regualr 3D grid of volume elements. Each individual cell in
+ grid is now voxel and the 3D grid is known as "Voxel Grid".
+
+###### Voxel Grid Code
+```python
+def do_voxel_grid_downssampling(pcl_data,leaf_size):
+    '''
+    Create a VoxelGrid filter object for a input point cloud
+    :param pcl_data: point cloud data subscriber
+    :param leaf_size: voxel(or leaf) size
+    :return: Voxel grid downsampling on point cloud
+    '''
+    vox = pcl_data.make_voxel_grid_filter()
+    vox.set_leaf_size(leaf_size, leaf_size, leaf_size)
+    return  vox.filter()
+    
+ # Convert ROS msg to PCL data
+cloud = ros_to_pcl(pcl_msg)
+
+
+# Voxel Grid Downsampling
+LEAF_SIZE = 0.01
+cloud = do_voxel_grid_downssampling(cloud,LEAF_SIZE)
+```
+
+#### 2D image into a regular grid of area elements(Left picture) and 3D grid volume elements(Right picture)
+![Voxel Grid](https://github.com/fouliex/RoboND-Perception-Exercises/blob/master/misc_images/VoxelGrid.png)
+
+
+###### [**Voxel Downsampling Sample code**](https://github.com/fouliex/RoboND-Perception-Exercises/blob/master/Exercise-1/voxel_grid_downsampling.py)
+
+### Apply Statistical Outlier Filtering
+
+Statistical Outlier Filtering is use to remove outlieres using number of neighboring points of 10 and standard deviation
+threshold of 0.001
+###### Statistical Outlier Filtering Code
+```python
+def do_statistical_outlier_filtering(pcl_data,mean_k,tresh):
+    '''
+    :param pcl_data: point could data subscriber
+    :param mean_k:  number of neighboring points to analyze for any given point
+    :param tresh:   Any point with a mean distance larger than global will be considered outlier
+    :return: Statistical outlier filtered point cloud data
+    '''
+    outlier_filter = pcl_data.make_statistical_outlier_filter()
+    outlier_filter.set_mean_k(mean_k)
+    outlier_filter.set_std_dev_mul_thresh(tresh)
+    return outlier_filter.filter()
+
+# Convert ROS msg to PCL data
+cloud = ros_to_pcl(pcl_msg)
+
+# Statistical Outlier Filtering
+cloud = do_statistical_outlier_filtering(cloud,10,0.001)
+```
+
+### Apply a Pass Through Filter to isolate the table and objects.
+When we have prior information about the location of a target in  the scene, we can apply a Pass Through Filter to remove useless data from our point cloud.
+The Pass Through Filter  works just like a cropping tool,which allows us to crop any given 3D point cloud by specifing an axis with cut-off values along that axis.
+The region that we allow to pass through is referred as **region of interest**.
+
+By applying a Pass Through filter along  z axis (the height with respect to the ground) to our tabletop scene in the
+range 0.1 to 0.8 gives us the table and filtered out all of the objects.
+
+![Pass through Table](https://github.com/fouliex/RoboND-Perception-Exercises/blob/master/misc_images/passthroughTable.png)
+
+By applying a Pass Through filter  with the following rage 0.6 and 1.1 isolate our region of interest containing the
+table and the objects on the table
+
+![Pass through Object](https://github.com/fouliex/RoboND-Perception-Exercises/blob/master/misc_images/passthroughTable.png)
+
+###### [**Pass Through Filter Sample code**](https://github.com/fouliex/RoboND-Perception-Exercises/blob/master/Exercise-1/pass_through_filtering.py)
+
+### Perform RANSAC plane fitting to identify the table.
+
+To Remove the table completely from the scene we can use a  popular technique known as **Random Sample Consensus**(RANSAC). RANSAC is an algorithm which is use to identify points in out dataset that belong to a particular model.
+In the  3D scene, the model can be a plane a cylinder, a box or any other common shape.
+
+The algorithm assumes that all of the data in a dataset is composed of both **inliers** and **outliers**.
+* Inliers can be defined by a particular model with a specific set of parameters.
+* Outliers if that model does not fit then it get discarded.
+
+By modeling the table as a plane, we can remove it from the point cloud.
+
+![Pass through Object](https://github.com/fouliex/RoboND-Perception-Exercises/blob/master/misc_images/RANSAC.png)
+
+we don't need to implement RANSAC plane fitting ourself because it is already included in the PCL library.
+## Euclidean Clustering with ROS and PCL
 # Project Setup
 For this setup, catkin_ws is the name of active ROS Workspace, if your workspace name is different, change the commands accordingly
 If you do not have an active ROS workspace, you can create one by:
