@@ -44,6 +44,11 @@ def make_yaml_dict(test_scene_num, arm_name, object_name, pick_pose, place_pose)
 
 # Helper function to output to yaml file
 def send_to_yaml(yaml_filename, dict_list):
+    '''
+    :param yaml_filename:
+    :param dict_list:
+    :return:
+    '''
     data_dict = {"object_list": dict_list}
     with open(yaml_filename, 'w') as outfile:
         yaml.dump(data_dict, outfile, default_flow_style=False)
@@ -242,6 +247,11 @@ def pcl_callback(pcl_msg):
 
 # function to load parameters and request PickPlace service
 def pr2_mover(object_list):
+    '''
+
+    :param object_list:
+    :return:
+    '''
 
     objects_map = {}  # name -> object
     for recognized_object in object_list:
