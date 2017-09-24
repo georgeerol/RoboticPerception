@@ -32,7 +32,6 @@ def do_voxel_grid_downssampling(pcl_data,leaf_size):
  # Convert ROS msg to PCL data
 cloud = ros_to_pcl(pcl_msg)
 
-
 # Voxel Grid Downsampling
 LEAF_SIZE = 0.01
 cloud = do_voxel_grid_downssampling(cloud,LEAF_SIZE)
@@ -79,14 +78,45 @@ range 0.1 to 0.8 gives us the table and filtered out all of the objects.
 
 ![Pass through Table](https://github.com/fouliex/RoboND-Perception-Exercises/blob/master/misc_images/passthroughTable.png)
 
-By applying a Pass Through filter  with the following rage 0.6 and 1.1 isolate our region of interest containing the
+By applying a Pass Through filter  with the following range 0.6 and 1.1 isolate our region of interest containing the
 table and the objects on the table
 
 ![Pass through Object](https://github.com/fouliex/RoboND-Perception-Exercises/blob/master/misc_images/passthroughTable.png)
 
+###### PassThrouh Filter Code
+```python
+def do_passthrough(pcl_data,filter_axis,axis_min,axis_max):
+    '''
+    Create a PassThrough  object and assigns a filter axis and range.
+    :param pcl_data: point could data subscriber
+    :param filter_axis: filter axis
+    :param axis_min: Minimum  axis to the passthrough filter object
+    :param axis_max: Maximum axis to the passthrough filter object
+    :return: passthrough on point cloud
+    '''
+    passthrough = pcl_data.make_passthrough_filter()
+    passthrough.set_filter_field_name(filter_axis)
+    passthrough.set_filter_limits(axis_min, axis_max)
+    return passthrough.filter()
+    
+# Convert ROS msg to PCL data
+cloud = ros_to_pcl(pcl_msg)
+
+# PassThrough Filter
+filter_axis ='z'
+axis_min = 0.44
+axis_max =0.85
+cloud = do_passthrough(cloud,filter_axis,axis_min,axis_max)
+
+filter_axis = 'x'
+axis_min = 0.33
+axis_max = 1.0
+cloud = do_passthrough(cloud, filter_axis, axis_min, axis_max)    
+```
+
 ###### [**Pass Through Filter Sample code**](https://github.com/fouliex/RoboND-Perception-Exercises/blob/master/Exercise-1/pass_through_filtering.py)
 
-### Perform RANSAC plane fitting to identify the table.
+### Perform RANSAC plane filtering to identify the table.
 
 To Remove the table completely from the scene we can use a  popular technique known as **Random Sample Consensus**(RANSAC). RANSAC is an algorithm which is use to identify points in out dataset that belong to a particular model.
 In the  3D scene, the model can be a plane a cylinder, a box or any other common shape.
@@ -99,8 +129,77 @@ By modeling the table as a plane, we can remove it from the point cloud.
 
 ![Pass through Object](https://github.com/fouliex/RoboND-Perception-Exercises/blob/master/misc_images/RANSAC.png)
 
-we don't need to implement RANSAC plane fitting ourself because it is already included in the PCL library.
+###### RANSAC Plane Filtering Code
+```python
+def do_ransac_plane_segmentation(pcl_data,pcl_sac_model_plane,pcl_sac_ransac,max_distance):
+    '''
+    Create the segmentation object
+    :param pcl_data: point could data subscriber
+    :param pcl_sac_model_plane: use to determine plane models
+    :param pcl_sac_ransac: RANdom SAmple Consensus
+    :param max_distance: Max distance for apoint to be considered fitting the model
+    :return: segmentation object
+    '''
+    seg = pcl_data.make_segmenter()
+    seg.set_model_type(pcl_sac_model_plane)
+    seg.set_method_type(pcl_sac_ransac)
+    seg.set_distance_threshold(max_distance)
+    return seg
+# Convert ROS msg to PCL data
+cloud = ros_to_pcl(pcl_msg)
+    
+# RANSAC Plane Segmentation
+ransac_segmentation = do_ransac_plane_segmentation(cloud,pcl.SACMODEL_PLANE,pcl.SAC_RANSAC,0.01)
+
+# Extract inliers and outliers
+cloud_table,cloud_objects= extract_cloud_objects_and_cloud_table(cloud,ransac_segmentation )
+```
+
 ## Euclidean Clustering with ROS and PCL
+To perform  Euclidean Clustering, a [k-d tree](http://pointclouds.org/documentation/tutorials/kdtree_search.php) from the 'cloud_objects' point cloud needs to be constructed.
+
+The k-d tree data structure is used in the Euclidian Clustering algorithm to decrease the computational burden of 
+searching for neighboring points. While other  efficient algorithms/data structures for nearest neighbor search exist,PCL's
+Euclidian Clustering algorithm only supports k-d trees.
+
+![Euclidean Cluster Extraction](https://github.com/fouliex/RoboND-Perception-Exercises/blob/master/misc_images/EuclideanClusterExtraction.png)
+
+###### Eucliean Cluster Extraction Code
+```python
+def do_euclidean_clustering(white_cloud):
+    '''
+    :param cloud_objects:
+    :return: cluster cloud and cluster indices
+    '''
+    tree = white_cloud.make_kdtree()
+
+    # Create Cluster-Mask Point Cloud to visualize each cluster separately
+    ec = white_cloud.make_EuclideanClusterExtraction()
+    ec.set_ClusterTolerance(0.015)
+    ec.set_MinClusterSize(50)
+    ec.set_MaxClusterSize(20000)
+    ec.set_SearchMethod(tree)
+    cluster_indices = ec.Extract()
+    cluster_color = get_color_list(len(cluster_indices))
+
+    color_cluster_point_list = []
+
+    for j, indices in enumerate(cluster_indices):
+        for i, indice in enumerate(indices):
+            color_cluster_point_list.append([white_cloud[indice][0],
+                                             white_cloud[indice][1],
+                                             white_cloud[indice][2],
+                                             rgb_to_float(cluster_color[j])])
+
+    cluster_cloud = pcl.PointCloud_PointXYZRGB()
+    cluster_cloud.from_list(color_cluster_point_list)
+    return cluster_cloud,cluster_indices
+    
+#TODO: Euclidean Clustering
+white_cloud= XYZRGB_to_XYZ(cloud_objects)
+cluster_cloud,cluster_indices = do_euclidean_clustering(white_cloud)
+```
+
 # Project Setup
 For this setup, catkin_ws is the name of active ROS Workspace, if your workspace name is different, change the commands accordingly
 If you do not have an active ROS workspace, you can create one by:
