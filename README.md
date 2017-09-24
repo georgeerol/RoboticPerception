@@ -195,10 +195,76 @@ def do_euclidean_clustering(white_cloud):
     cluster_cloud.from_list(color_cluster_point_list)
     return cluster_cloud,cluster_indices
     
-#TODO: Euclidean Clustering
+# Euclidean Clustering
 white_cloud= XYZRGB_to_XYZ(cloud_objects)
 cluster_cloud,cluster_indices = do_euclidean_clustering(white_cloud)
 ```
+## Object Recognition
+Object Recognition is a central theme in computer vision and perception for robotics. When we view a scene with our eyes,
+we are constantly performing the task of object recognition for the world we see before us. With sensors, a robot can
+perceive the world around it in therms of depth, color etc.Therefore a robot can recognize objects in its surroundings,
+just like we do.
+
+In any given image or a 3D point cloud, we might find a variety of objects of differing shapes and sizes. In many robotic
+application there will be a particular object that we are looking for in the scene, similar to the amazon project. This
+object of interest might be at any distance any orientation and it might even be obscured by other objects in the scene.
+so the question is how can we reliably locate what we are looking for in our field of view, regardless of its position or 
+orientation?
+
+The goal is to find the features that best describe the object we are looking for. The better the  description of the 
+object we are looking for, the more likely the algorithm is to find it. Which is to say the better we can characterize 
+the feature that uniquely differentiate our target from other objects in the scene, the more robost our object recognition 
+algorithm will be.
+
+### Features
+With a feature set in hand, we can train a classifier to  recognize the object that we are searching for in our point 
+cloud.
+
+Having prior knowledge of thing like where we expect to find our object of interest can help us zero in on the areas of 
+the point cloud containing our object.
+
+
+[Picture]
+
+After segmentation, we have a point cloud that we have broken down into individual objects and for each point in the cloud
+we have RGV color information as well as spatial information in three dimensions.
+[picture]
+
+Therefore, it makes sense to explore feature sets that include some combination of this color and shape information in a
+way that differentiates our object of interest from objects in the environment.
+
+
+### Color Spaces
+For the data we have been working with so far, we know that just like each pixel and images, each point in our point 
+cloud has an associated set of red, green, and blue or RGB color values. In the
+[Search and Sample project](https://github.com/fouliex/SearchAndSampleRoverProject) we use a combination
+of color threshold on the RGB values to pick out light versus dark areas or to isolate a particular color.
+
+We can think of RGB values as filling a color grid like the picture below. Where the position along each of the axes 
+defines how much red, green, and blue we have in a point.
+
+After Segmentation
+
+it's just like as if one were to tell us
+
+
+
+
+
+From  the gazebo world, we can extract color and shape features from the objects segmented from our point
+ cloud  in order to train  a classifier to detect each objects.
+ 
+### Training a classifier  from the Gazebo World
+
+![Detect Each Objects](https://github.com/fouliex/RoboticPerception/blob/master/pr2_robot/misc/DetectEachObjects.png)
+### Confusion Matrix
+![Confusion Matrix](https://github.com/fouliex/RoboticPerception/blob/master/pr2_robot/misc/ConfusionMatrix.JPG)
+These plots are showing  two different versions of the confusion matrix for the classifier.On the left is raw counts and
+ on the right as a percentage of the total. 
+
+  Trained model are saved in the model folder 
+
+
 
 # Project Setup
 For this setup, catkin_ws is the name of active ROS Workspace, if your workspace name is different, change the commands accordingly
