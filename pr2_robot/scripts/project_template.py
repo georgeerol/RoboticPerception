@@ -98,7 +98,7 @@ def do_ransac_plane_segmentation(pcl_data,pcl_sac_model_plane,pcl_sac_ransac,max
     :param pcl_data: point could data subscriber
     :param pcl_sac_model_plane: use to determine plane models
     :param pcl_sac_ransac: RANdom SAmple Consensus
-    :param max_distance: Max distance for apoint to be considered fitting the model
+    :param max_distance: Max distance for a point to be considered fitting the model
     :return: segmentation object
     '''
     seg = pcl_data.make_segmenter()
@@ -247,11 +247,6 @@ def pcl_callback(pcl_msg):
 
 # function to load parameters and request PickPlace service
 def pr2_mover(object_list):
-    '''
-
-    :param object_list:
-    :return:
-    '''
 
     objects_map = {}  # name -> object
     for recognized_object in object_list:
