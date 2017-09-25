@@ -278,6 +278,7 @@ But the colorful objects still appear bright in HSV
 ![RGB filling a color grid.JPG](./pr2_robot/misc/HSVColorSpaceInDark.JPG)
 
 We can darken the RGB image even further but the objects in the HSV image will remain bright.
+To use HSV, in [capture_features.py](/pr2_robot/scripts/capture_features.py) change the flag to `using_hsv=True` from `compute_color_histograms()`.
 
 
 ### Color Histograms
@@ -301,7 +302,7 @@ clouds, we have an extra dimension of shape information to investigate. In our p
  on the 3D shapes of the object which is to say we have the view of the object surface from just one perspective. What
  we would like to do is to compare the distribution of points with a ground truth or reference distribution in order to
  decide whether or not we have found what we are looking for. To do this, we need a metric that captures shape and one such
- metric is the **distribution of surface nornals.**
+ metric is the **distribution of surface normals.**
  
  The normal of a surface is just a unit vector that is perpendicular to that surface. The normals at different points,
  along the changing surface, will point in different direction and the distribution of surface normals taken a a whole
@@ -313,8 +314,24 @@ We can create this distribution the same with color by building up the individua
 From  the gazebo world, we can extract color and shape features from the objects segmented from our point
  cloud  in order to train  a classifier to detect each objects.
 
+ We can generate a training set of features for all objects in the pick list files in [/pr2_robot/config/](/pr2_robot/config/).
+ Each pick list corresponds to a a world a scenario therefore indicating what items will be present in that scenario.
+ To generate the training set, the models list in the python file [capture_features.py](/pr2_robot/scripts/capture_features.py)
+
+ To test with the project, first run:
+ ```sh
+$ cd ~/catkin_ws
+$ rosrun sensor_stick capture_features.py
+ ```
+
+
 ![Detect Each Objects](./pr2_robot/misc/DetectEachObjects.png)
 ### Confusion Matrix
+Once the feature extraction is completed we can train our model by running the python file `train_svm.py`.
+ ```sh
+$ rosrun sensor_stick train_svm.py
+ ```
+The script will create the Confusion Matrix and generate  the trained model(model.sav)
 ![Confusion Matrix](./pr2_robot/misc/ConfusionMatrix.JPG)
 These plots are showing  two different versions of the confusion matrix for the classifier.On the left is raw counts and
  on the right as a percentage of the total. Trained model are saved in the model folder 
