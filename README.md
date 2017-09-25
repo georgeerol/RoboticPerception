@@ -245,13 +245,12 @@ defines how much red, green, and blue we have in a point because objects can app
 under different lighting conditions. Fortunately, it's easy to convert our data to other color representation in order to
 make our thresholding or color selection operations less sensitive to changes in lighting.
 
-![RGB filling a color grid.JPG](https://github.com/fouliex/RoboticPerception/blob/master/pr2_robot/misc/RGBFillingAColorGrid.JPG)
-
 RGB representation of color does a nice job of reproducing what we see with our own eyes but it's not the most robust
 color representation for perception tasks in robotics.
 
 Different color representations as known as color spaces, and one such color space that is particularly robust to lighting
 change is HSV which stands for hue, saturation and value.In the HSV space, color is represented by a cylinder as seen below.
+
 ![RGB filling a color grid.JPG](https://github.com/fouliex/RoboticPerception/blob/master/pr2_robot/misc/RGBFillingAColorGrid.JPG) 
 
 You can think of the hue which is represented as angular position around the cylinder as describing what color is in a 
