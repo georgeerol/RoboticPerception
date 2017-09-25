@@ -81,7 +81,7 @@ range 0.1 to 0.8 gives us the table and filtered out all of the objects.
 By applying a Pass Through filter  with the following range 0.6 and 1.1 isolate our region of interest containing the
 table and the objects on the table
 
-![Pass through Object](https://github.com/fouliex/RoboND-Perception-Exercises/blob/master/misc_images/passthroughTable.png)
+![Pass through Object](https://github.com/fouliex/RoboND-Perception-Exercises/blob/master/misc_images/passthroughObjects.png)
 
 ###### PassThrouh Filter Code
 ```python
