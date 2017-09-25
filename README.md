@@ -223,12 +223,12 @@ cloud.
 Having prior knowledge of thing like where we expect to find our object of interest can help us zero in on the areas of 
 the point cloud containing our object.
 
-
-[Picture]
+![ZeroInOnTheAreasOfInterest.JPG](https://github.com/fouliex/RoboticPerception/blob/master/pr2_robot/misc/ZeroInOnTheAreasOfInterest.JPG)
 
 After segmentation, we have a point cloud that we have broken down into individual objects and for each point in the cloud
 we have RGV color information as well as spatial information in three dimensions.
-[picture]
+
+![After Segmentation .JPG](https://github.com/fouliex/RoboticPerception/blob/master/pr2_robot/misc/AfterSegmentation.JPG)
 
 Therefore, it makes sense to explore feature sets that include some combination of this color and shape information in a
 way that differentiates our object of interest from objects in the environment.
@@ -241,29 +241,58 @@ cloud has an associated set of red, green, and blue or RGB color values. In the
 of color threshold on the RGB values to pick out light versus dark areas or to isolate a particular color.
 
 We can think of RGB values as filling a color grid like the picture below. Where the position along each of the axes 
-defines how much red, green, and blue we have in a point.
+defines how much red, green, and blue we have in a point because objects can appear to have quite a different color 
+under different lighting conditions. Fortunately, it's easy to convert our data to other color representation in order to
+make our thresholding or color selection operations less sensitive to changes in lighting.
 
-After Segmentation
+![RGB filling a color grid.JPG](https://github.com/fouliex/RoboticPerception/blob/master/pr2_robot/misc/RGBFillingAColorGrid.JPG)
 
-it's just like as if one were to tell us
+RGB representation of color does a nice job of reproducing what we see with our own eyes but it's not the most robust
+color representation for perception tasks in robotics.
+
+Different color representations as known as color spaces, and one such color space that is particularly robust to lighting
+change is HSV which stands for hue, saturation and value.In the HSV space, color is represented by a cylinder as seen below.
+![RGB filling a color grid.JPG](https://github.com/fouliex/RoboticPerception/blob/master/pr2_robot/misc/RGBFillingAColorGrid.JPG) 
+
+You can think of the hue which is represented as angular position around the cylinder as describing what color is in a 
+pixel, the saturation which is measured as radial distance from the center axes as being the intensity of that color, and
+value or aural brightness along the vertical axes.
 
 
+To convert an RGB image to HSV color space we can use the cv2 ro convert color function like this
+```python
+hsv_image = cv2.cvtColor(rgb_image,cv2.COLOR_RGB2HSV)
+```
+Here's an image in RGB color space
+
+![RGB filling a color grid.JPG](./pr2_robot/misc/RGBColorSpace.JPG) 
+
+and here's what it looks like in an HSV color space. Where red now represent hue, green saturation, and blue value.
+
+![RGB filling a color grid.JPG](./pr2_robot/misc/HSVColorSpace.JPG) 
+
+If we turn the light down on the scene, the RGB image looks like the picture below
+
+![RGB filling a color grid.JPG](./pr2_robot/misc/RGBColorSpaceWhenDark.JPG) 
+
+But the colorful objects still appear bright in HSV
+![RGB filling a color grid.JPG](./pr2_robot/misc/HSVColorSpaceInDark.JPG)
+
+We can darken the RGB image even further but the objects in the HSV image will remain bright.
 
 
-
-From  the gazebo world, we can extract color and shape features from the objects segmented from our point
- cloud  in order to train  a classifier to detect each objects.
- 
-### Training a classifier  from the Gazebo World
-
-![Detect Each Objects](https://github.com/fouliex/RoboticPerception/blob/master/pr2_robot/misc/DetectEachObjects.png)
-### Confusion Matrix
-![Confusion Matrix](https://github.com/fouliex/RoboticPerception/blob/master/pr2_robot/misc/ConfusionMatrix.JPG)
-These plots are showing  two different versions of the confusion matrix for the classifier.On the left is raw counts and
- on the right as a percentage of the total. 
-
-  Trained model are saved in the model folder 
-
+### Color Histograms
+One way to convert color information into features that we can use for classification is by building up our color value
+into a histogram. To construct an histogram we simply need to divide up the rage of our data values from 0-255, in this
+case into discrete bins.Then count up how many of the values fall into each bin. When we compare the colored histogram
+of a known object image with regions of a test image, locations with similar color distributions will reveal a close match.
+  
+With this method we have removed any dependence on spatial structure,that is, we ar no longer sensitive to a perfect
+arrangement of points.Therefore, objects that appears in slightly different poses and orientations will still be matched.
+  
+Variations in image size can also be accommodated by normalizing the histograms.However, note that we are now solely
+relying on the distribution of  color values which might match some unwanted regions resulting in false positives.
+  
 
 
 # Project Setup
