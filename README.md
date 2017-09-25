@@ -319,7 +319,21 @@ From  the gazebo world, we can extract color and shape features from the objects
 These plots are showing  two different versions of the confusion matrix for the classifier.On the left is raw counts and
  on the right as a percentage of the total. Trained model are saved in the model folder 
 
+# Pick and Place
+For this project, we have a variety of different objects to identify. There are 3 different worlds(test1.world, test2.wold and test3.world) to work with where each world has different items on the table in front of the robot.
+These worlds are located in the [/pr2_robot/worlds/](./pr2_robot/worlds/)
+ Object recognition can be performed base on the train model.sav generated. The program read each pick list which are pick_list1.yaml
+pick_list_2.yaml and pick_list_3.yaml and display the name of each objects.
 
+## First World
+For the first world, PR2 was able to identify all 3 items which are the soap sop2 and biscuits. See output_1.yaml located in the [/pr2_robot/output/](./pr2_robot/output/)
+[Add Picture]
+## Second World
+For the second world, PR2 was able to identify all  5 items which are soap2 book glue soap abd biscuits. See output_2.yaml located in the [/pr2_robot/output/](./pr2_robot/output/)
+[Add Picture]
+## Third World
+For the third world, PR2 was able to identify 7 out of the 8 objects. For some reason PR2 was unable to recognize the glue items which are soap2 book glue soap abd biscuits. See output_3.yaml located in the [/pr2_robot/output/](./pr2_robot/output/)
+[Add Picture]
 
 # Project Setup
 For this setup, catkin_ws is the name of active ROS Workspace, if your workspace name is different, change the commands accordingly
