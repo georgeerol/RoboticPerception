@@ -411,7 +411,6 @@ Now that you have a workspace, clone or download this repo into the src director
 $ cd ~/catkin_ws/src
 $ git clone https://github.com/udacity/RoboND-Perception-Project.git
 ```
-### Note: If you have the Kinematics Pick and Place project in the same ROS Workspace as this project, please remove the 'gazebo_grasp_plugin' directory from the `RoboND-Perception-Project/` directory otherwise ignore this note. 
 
 Now install missing dependencies using rosdep install:
 ```sh
@@ -451,9 +450,6 @@ Once Gazebo is up and running, make sure you see following in the gazebo world:
 - Three target objects on the table
 
 - Dropboxes on either sides of the robot
-
-
-If any of these items are missing, please report as an issue on [the waffle board](https://waffle.io/udacity/robotics-nanodegree-issues).
 
 In your RViz window, you should see the robot and a partial collision map displayed:
 
