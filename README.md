@@ -289,7 +289,7 @@ of a known object image with regions of a test image, locations with similar col
   
 With this method we have removed any dependence on spatial structure,that is, we ar no longer sensitive to a perfect
 arrangement of points.Therefore, objects that appears in slightly different poses and orientations will still be matched.
-  
+
 Variations in image size can also be accommodated by normalizing the histograms.However, note that we are now solely
 relying on the distribution of  color values which might match some unwanted regions resulting in false positives.
   
@@ -304,13 +304,23 @@ clouds, we have an extra dimension of shape information to investigate. In our p
  decide whether or not we have found what we are looking for. To do this, we need a metric that captures shape and one such
  metric is the **distribution of surface nornals.**
  
- 
  The normal of a surface is just a unit vector that is perpendicular to that surface. The normals at different points,
  along the changing surface, will point in different direction and the distribution of surface normals taken a a whole
  can be used to describe the shape of the objects.
- 
+ ![RGB filling a color grid.JPG](./pr2_robot/misc/SurfaceNormal.JPG)
 We can create this distribution the same with color by building up the individual surface normals into a histogram.
- 
+
+### Training a classifier  from the Gazebo World
+From  the gazebo world, we can extract color and shape features from the objects segmented from our point
+ cloud  in order to train  a classifier to detect each objects.
+
+![Detect Each Objects](./pr2_robot/misc/DetectEachObjects.png)
+### Confusion Matrix
+![Confusion Matrix](./pr2_robot/misc/ConfusionMatrix.JPG)
+These plots are showing  two different versions of the confusion matrix for the classifier.On the left is raw counts and
+ on the right as a percentage of the total. Trained model are saved in the model folder 
+
+
 
 # Project Setup
 For this setup, catkin_ws is the name of active ROS Workspace, if your workspace name is different, change the commands accordingly
