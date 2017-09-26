@@ -282,35 +282,35 @@ To use HSV, in [capture_features.py](/pr2_robot/scripts/capture_features.py) cha
 
 ### Color Histograms
 One way to convert color information into features that we can use for classification is by building up our color value
-into a histogram. To construct a histogram we simply need to divide up the rage of our data values from 0-255, in this
+into a histogram. To construct a histogram, we simply need to divide up the rage of our data values from 0-255, in this
 case into discrete bins.Then count up how many of the values fall into each bin. When we compare the colored histogram
 of a known object image with regions of a test image, locations with similar color distributions will reveal a close match.
   
-With this method we have removed any dependence on spatial structure,that is, we ar no longer sensitive to a perfect
-arrangement of points.Therefore, objects that appears in slightly different poses and orientations will still be matched.
+With this method we have removed any dependence on spatial structure, that is, we are no longer sensitive to a perfect
+arrangement of points.Therefore, objects that appear in slightly different poses and orientations will still be matched.
 
 Variations in image size can also be accommodated by normalizing the histograms.However, note that we are now solely
-relying on the distribution of  color values which might match some unwanted regions resulting in false positives.
+relying on the distribution of color values which might match some unwanted regions resulting in false positives.
   
 
 ### Surface Normals 
-As one can see color can be used for object recognition but another powerful way to find what we are looking for in our 
+As one can see color can be used for object recognition, but another powerful way to find what we are looking for in our 
 data is by searching for particular shapes vector images. We can search for a given template shape or simply take the
 gradient of the image and explore the distribution of lights and edges that emerge. Since we are working with 3D point
-clouds, we have an extra dimension of shape information to investigate. In our point cloud we have partial information
+clouds, we have an extra dimension of shape information to investigate. In our point cloud, we have partial information
  on the 3D shapes of the object which is to say we have the view of the object surface from just one perspective. What
  we would like to do is to compare the distribution of points with a ground truth or reference distribution in order to
  decide whether or not we have found what we are looking for. To do this, we need a metric that captures shape and one such
  metric is the **distribution of surface normals.**
  
  The normal of a surface is just a unit vector that is perpendicular to that surface. The normals at different points,
- along the changing surface, will point in different direction and the distribution of surface normals taken a a whole
+ along with the changing surface, will point in different direction and the distribution of surface normals taken a whole
  can be used to describe the shape of the objects.
  ![RGB filling a color grid.JPG](./pr2_robot/misc/SurfaceNormal.JPG)
 We can create this distribution the same with color by building up the individual surface normals into a histogram.
 
 ### Object Recognition Code
-Below is the  Object Recognition  snippet Code.
+Below is the  Object Recognition snippet Code.
 The entire sourcecode is located in the `project_template.py`  which is located in the [script folder](/pr2_robot/scripts/) folder.
 
 
@@ -355,10 +355,10 @@ The entire sourcecode is located in the `project_template.py`  which is located 
 
 ### Training a classifier  from the Gazebo World
 From  the gazebo world, we can extract color and shape features from the objects segmented from our point
- cloud  in order to train  a classifier to detect each objects.
+ cloud  in order to train  a classifier to detect each object.
 
  We can generate a training set of features for all objects in the pick list files in [/pr2_robot/config/](/pr2_robot/config/).
- Each pick list corresponds to a a world a scenario therefore indicating what items will be present in that scenario.
+ Each pick list corresponds to a world or a scenario, therefore indicating what items will be present in that scenario.
  To generate the training set, the models list in the python file [capture_features.py](/pr2_robot/scripts/capture_features.py)
 
  To test with the project, first run:
@@ -370,17 +370,17 @@ $ rosrun sensor_stick capture_features.py
 
 ![Detect Each Objects](./pr2_robot/misc/DetectEachObjects.png)
 ### Confusion Matrix
-Once the feature extraction is completed we can train our model by running the python file `train_svm.py`.
+Once the feature extraction is completed, we can train our model by running the python file `train_svm.py`.
  ```sh
 $ rosrun sensor_stick train_svm.py
  ```
 The script will create the Confusion Matrix and generate  the trained model(model.sav)
 ![Confusion Matrix](./pr2_robot/misc/ConfusionMatrix.JPG)
-These plots are showing  two different versions of the confusion matrix for the classifier.On the left is raw counts and
+These plots are showing two different versions of the confusion matrix for the classifier.On the left is raw counts and
  on the right as a percentage of the total. Trained model are saved in the model folder 
 
 # Pick and Place
-For this project, we have a variety of different objects to identify. There are 3 different worlds(test1.world, test2.wold and test3.world) to work with where each world has different items on the table in front of the robot.
+For this project, we have a variety of different objects to identify. There are 3 different worlds(test1.world, test2.world and test3.world) to work with where each world has different items on the table in front of the robot.
 These worlds are located in the [/pr2_robot/worlds/](./pr2_robot/worlds/)
  Object recognition can be performed base on the train model.sav generated. The program read each pick list which are pick_list1.yaml
 pick_list_2.yaml and pick_list_3.yaml and display the name of each objects.
@@ -389,7 +389,7 @@ pick_list_2.yaml and pick_list_3.yaml and display the name of each objects.
 For the first world, PR2 was able to identify all 3 items which are the soap sop2 and biscuits. See output_1.yaml located in the [/pr2_robot/output/](./pr2_robot/output/)
 ![World 1 ](./pr2_robot/misc/world1.JPG)
 ## Second World
-For the second world, PR2 was able to identify 4 out of 5 items which are soap2 book soap and biscuits.  For some reason PR2 was unable to recognize the glue items it keeps seeing it as a snacks. See output_2.yaml located in the [/pr2_robot/output/](./pr2_robot/output/)
+For the second world, PR2 was able to identify 4 out of 5 items which are soap2 book soap and biscuits.  For some reason, PR2 was unable to recognize the glue, it keeps seeing it as a snacks. See output_2.yaml located in the [/pr2_robot/output/](./pr2_robot/output/)
 ![World 2 ](./pr2_robot/misc/world2.JPG)
 ## Third World
 For the third world, PR2 was able to identify all 8 objects. See output_3.yaml located in the [/pr2_robot/output/](./pr2_robot/output/)
