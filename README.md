@@ -390,10 +390,10 @@ pick_list_2.yaml and pick_list_3.yaml and display the name of each objects.
 For the first world, PR2 was able to identify all 3 items which are the soap sop2 and biscuits. See output_1.yaml located in the [/pr2_robot/output/](./pr2_robot/output/)
 ![World 1 ](./pr2_robot/misc/world1.JPG)
 ## Second World
-For the second world, PR2 was able to identify 4 out of 5 items which are soap2 book  soap and biscuits. See output_2.yaml located in the [/pr2_robot/output/](./pr2_robot/output/)
+For the second world, PR2 was able to identify 4 out of 5 items which are soap2 book soap and biscuits.  For some reason PR2 was unable to recognize the glue items it keeps seeing it as a snacks. See output_2.yaml located in the [/pr2_robot/output/](./pr2_robot/output/)
 ![World 2 ](./pr2_robot/misc/world2.JPG)
 ## Third World
-For the third world, PR2 was able to identify 7 out of the 8 objects. For some reason PR2 was unable to recognize the glue items it keeps seeing it as a snacks. See output_3.yaml located in the [/pr2_robot/output/](./pr2_robot/output/)
+For the third world, PR2 was able to identify all 8 objects. See output_3.yaml located in the [/pr2_robot/output/](./pr2_robot/output/)
 ![World 3 ](./pr2_robot/misc/world3.JPG)
 
 # Project Setup
