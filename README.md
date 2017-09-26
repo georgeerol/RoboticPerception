@@ -206,7 +206,7 @@ perceive the world around it in terms of depth, color etc. Therefore a robot can
 just like we do.
 
 In any given image or a 3D point cloud, we might find a variety of objects of differing shapes and sizes. In many robotic
-application, there will be a particular object that we are looking for in the scene, similar to the [Amazon Robotics Challenge](https://www.amazonrobotics.com/#/roboticschallenge/results. This
+application, there will be a particular object that we are looking for in the scene, similar to the [Amazon Robotics Challenge](https://www.amazonrobotics.com/#/roboticschallenge/results). This
 object of interest might be at any distance any orientation, and it might even be obscured by other objects in the scene.
 Therefore, the question is how can we reliably locate what we are looking for in our field of view, regardless of its position or 
 orientation?
