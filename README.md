@@ -234,26 +234,26 @@ way that differentiates our object of interest from objects in the environment.
 
 
 ### Color Spaces
-For the data we have been working with so far, we know that just like each pixel and images, each point in our point 
+For the data, we have been working with so far, we know that just like each pixel and images, each point in our point 
 cloud has an associated set of red, green, and blue or RGB color values. In the
 [Search and Sample project](https://github.com/fouliex/SearchAndSampleRoverProject) we use a combination
 of color threshold on the RGB values to pick out light versus dark areas or to isolate a particular color.
 
 We can think of RGB values as filling a color grid like the picture below. Where the position along each of the axes 
-defines how much red, green, and blue, we have in a point because objects can appear to have quite a different color 
+defines how much red, green, and blue, we have a point because objects can appear to have quite a different color 
 under different lighting conditions. Fortunately, it's easy to convert our data to other color representation in order to
 make our thresholding or color selection operations less sensitive to changes in lighting.
 
-RGB representation of color does a nice job of reproducing what we see with our own eyes but it's not the most robust
+RGB representation of color does an excellent job of reproducing what we see with our own eyes, but it's not the most robust
 color representation for perception tasks in robotics.
 
-Different color representations as known as color spaces, and one such color space that is particularly robust to lighting
+Different color representations as known as color spaces and one such color space that is particularly robust to lighting
 change is HSV which stands for hue, saturation and value.In the HSV space, color is represented by a cylinder as seen below.
 
 ![RGB filling a color grid.JPG](https://github.com/fouliex/RoboticPerception/blob/master/pr2_robot/misc/RGBFillingAColorGrid.JPG) 
 
-You can think of the hue which is represented as angular position around the cylinder as describing what color is in a 
-pixel, the saturation which is measured as radial distance from the center axes as being the intensity of that color, and
+You can think of the hue which is described as angular position around the cylinder as describing what color is in a 
+pixel, the saturation which is measured as a radial distance from the center axes as being the intensity of that color, and
 value or aural brightness along the vertical axes.
 
 
@@ -276,7 +276,7 @@ If we turn the light down on the scene, the RGB image looks like the picture bel
 But the colorful objects still appear bright in HSV
 ![RGB filling a color grid.JPG](./pr2_robot/misc/HSVColorSpaceInDark.JPG)
 
-We can darken the RGB image even further but the objects in the HSV image will remain bright.
+We can darken the RGB image even further, but the objects in the HSV image will remain bright.
 To use HSV, in [capture_features.py](/pr2_robot/scripts/capture_features.py) change the flag to `using_hsv=True` from `compute_color_histograms()`.
 
 
