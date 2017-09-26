@@ -388,13 +388,13 @@ pick_list_2.yaml and pick_list_3.yaml and display the name of each objects.
 
 ## First World
 For the first world, PR2 was able to identify all 3 items which are the soap sop2 and biscuits. See output_1.yaml located in the [/pr2_robot/output/](./pr2_robot/output/)
-[Add Picture]
+![World 1 ](./pr2_robot/misc/world1.JPG)
 ## Second World
-For the second world, PR2 was able to identify all  5 items which are soap2 book glue soap abd biscuits. See output_2.yaml located in the [/pr2_robot/output/](./pr2_robot/output/)
-[Add Picture]
+For the second world, PR2 was able to identify 4 out of 5 items which are soap2 book  soap and biscuits. See output_2.yaml located in the [/pr2_robot/output/](./pr2_robot/output/)
+![World 2 ](./pr2_robot/misc/world2.JPG)
 ## Third World
-For the third world, PR2 was able to identify 7 out of the 8 objects. For some reason PR2 was unable to recognize the glue items which are soap2 book glue soap abd biscuits. See output_3.yaml located in the [/pr2_robot/output/](./pr2_robot/output/)
-[Add Picture]
+For the third world, PR2 was able to identify 7 out of the 8 objects. For some reason PR2 was unable to recognize the glue items it keeps seeing it as the snaks. See output_3.yaml located in the [/pr2_robot/output/](./pr2_robot/output/)
+![World 3 ](./pr2_robot/misc/world3.JPG)
 
 # Project Setup
 For this setup, catkin_ws is the name of active ROS Workspace, if your workspace name is different, change the commands accordingly
