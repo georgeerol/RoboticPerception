@@ -1,10 +1,9 @@
 [//]: # (Image References)
 [image_0]: ./pr2_robot/misc/PR2.gif
-# Search and Sample Return Project
+# 3D Perception
 ![alt text][image_0] 
 
 
-# 3D Perception
 This [Udacity clone project](https://github.com/udacity/RoboND-Perception-Project) is modeled after [Amazon Robotics Challenge](https://www.amazonrobotics.com/#/roboticschallenge/results). Giving a robot the ability to locate an object in a cluttered environment, pick it up and then move it to some other location is not just an interesting problem to try to solve,
 it's a challenge at the forefront of the robotics industry today. 
 
